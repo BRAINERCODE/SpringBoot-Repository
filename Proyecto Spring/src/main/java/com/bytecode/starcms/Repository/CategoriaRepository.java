@@ -19,12 +19,11 @@ public class CategoriaRepository implements ICategoriaRep {
 		try {
 			String sql = String.format(
 					"insert into categoria (Nombre,Descripcion,CategoriaSuperior) values ('%s','%s','%d')",
-
 					object.getNombre(), object.getDescripcion(), object.getCategoriaSuperior());
 
 			jdbctemplate.execute(sql);
 			return true;
-			
+
 		} catch (Exception e) {
 			return false;
 		}
@@ -33,9 +32,11 @@ public class CategoriaRepository implements ICategoriaRep {
 	@Override
 	public boolean Update(Categoria object) {
 		if (object.getIdCategoria() != 0) {
-			String sql = String.format("update categoria set Nombre ='%s', Descripcion = '%s', CategoriaSuperior='%d'"
-					+ "where IdCategoria='%d'", object.getNombre(),
-					object.getDescripcion(), object.getCategoriaSuperior() , object.getIdCategoria());
+			String sql = String.format(
+					"update categoria set Nombre ='%s', Descripcion = '%s', CategoriaSuperior='%d'"
+							+ "where IdCategoria='%d'",
+					object.getNombre(), object.getDescripcion(), object.getCategoriaSuperior(),
+					object.getIdCategoria());
 			jdbctemplate.execute(sql);
 			return true;
 		}
@@ -44,16 +45,24 @@ public class CategoriaRepository implements ICategoriaRep {
 
 	@Override
 	public List<Categoria> findAll() {
-		return jdbctemplate.query("select * from categoria",new CategoriaMapper());
+		return jdbctemplate.query("select * from categoria", new CategoriaMapper());
 	}
 
 	@Override
 	public Categoria findById(int id) {
-		 return jdbctemplate.queryForObject("SELECT * FROM categoria WHERE id = ?",
-		            new CategoriaMapper(), id);
-		  
+		return jdbctemplate.queryForObject("SELECT * FROM categoria WHERE IdCategoria = ?", new CategoriaMapper(), id);
+
 	}
 
-	
+	@Override
+	public boolean DeleteById(int id) {
+		try {
+			String sql = String.format("delete from categoria where IdCategoria ='%d'", id);
+			jdbctemplate.execute(sql);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 }

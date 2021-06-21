@@ -7,7 +7,49 @@
 </head>
 
 <body>
-	<div th:replace="/Administrator/Componentes/nav.html"></div>
-	<div th:replace="/Administrator/Componentes/Bienvenida.html"></div>
+<div th:replace="/administrator/Componentes/nav.html"></div>
+<div th:replace="/administrator/Componentes/Bienvenida.html"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div th:if="${#httpServletRequest.getParameter('viewName') == null || #httpServletRequest.getParameter('viewName') == 'all'}" class="col-12">
+                <table class="table">
+                    <thead class="bg-primary text-white">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Comentario</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Accion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="Comentario : ${comentario}">
+                        <th scope="row" th:text="${Comentario.getComentario}"></th>
+                        <td th:text="${Comentario.getFecha()}"></td>
+                        <td style="display: flex; justify-items: center; align-items: center;">
+                            <button type="button" class="btn btn-warning">
+                                <a class="text-white" th:href="'/Admin/Comentario?viewName=update&id=' + ${Comentario.getIdComentario()}">Editar</a>
+                            </button>
+                            <form style="margin: 0px;" th:action="@{/Admin/Comentario}" th:method="delete">
+                                <input type="hidden" name="id" th:value="${Comentario.getIdComentario()}">
+                                <button class="text-white btn btn-danger" type="submit">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-primary mt-4 mb-4">
+                    <a class="text-white" th:href="'/Admin/Comentario?viewName=new'">Agregar Comentario</a>
+                </button>
+            </div>
+        </div>
+
+        <div th:if="${#httpServletRequest.getParameter('viewName') == 'new' || #httpServletRequest.getParameter('viewName') == 'update'}" class="col-12">
+           
+    </div>
+</div>
 </body>
 </html>
